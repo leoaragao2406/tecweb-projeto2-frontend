@@ -31,6 +31,24 @@ const CoinDetails = ({ coin, onClose }) => {
     setBuyValue(roundedValue);
   };
 
+  const handleBuySell = async (action) => {
+    // Construir o objeto de dados a ser enviado para o backend
+    const postData = {
+      title: coin.name,
+      action: action, // Ação agora é passada como parâmetro
+      value: buyValue,
+      quant: buyQuantity,
+    };
+
+    try {
+      // Enviar a requisição POST para o seu endpoint
+      const response = await axios.post('http://127.0.0.1:8000/api/coins', postData);
+      console.log(response.data); // Exibir a resposta do backend, se necessário
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <div className="coin-details">
       <button className="butao-close" onClick={onClose}>Close</button>
@@ -38,7 +56,7 @@ const CoinDetails = ({ coin, onClose }) => {
       {/* Add other details you want to display */}
       <div className="valores">
         <div>
-          <label htmlFor="buyValue">$:</label>
+          <label htmlFor="buyValue">USD : </label>
           <input
             type="number"
             id="buyValue"
@@ -47,7 +65,7 @@ const CoinDetails = ({ coin, onClose }) => {
           />
         </div>
         <div className="buy-quant">
-          <label htmlFor="buyQuantity">UND:</label>
+          <label htmlFor="buyQuantity">UND : </label>
           <input
             type="number"
             id="buyQuantity"
@@ -57,8 +75,8 @@ const CoinDetails = ({ coin, onClose }) => {
         </div>
       </div>
       <div className="butoes">
-        <button className="butao-buy">Buy</button>
-        <button className="butao-sell">Sell</button>
+        <button className="butao-buy" onClick={() => handleBuySell('buy')}>Buy</button>
+        <button className="butao-sell" onClick={() => handleBuySell('sell')}>Sell</button>
       </div>
     </div>
   );
